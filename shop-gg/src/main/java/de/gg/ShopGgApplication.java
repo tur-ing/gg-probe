@@ -1,33 +1,38 @@
 package de.gg;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-
-import de.gg.solr.CustomerSolrRepository;
+import org.springframework.data.solr.server.support.HttpSolrServerFactoryBean;
 
 @SpringBootApplication
+@EnableJpaRepositories("de.gg.repository")
 @EnableSolrRepositories("de.gg.solr")
 public class ShopGgApplication {
 
-	@Bean
-	public SolrServer solrServer() {
-	    return new HttpSolrServer("http://localhost:8983/solr");
-	}
-	 
-	@Bean
-	public SolrTemplate solrTemplate(SolrServer server) throws Exception {
-	    return new SolrTemplate(server);
-	}
-	
-	@Autowired
-	private CustomerSolrRepository repository;
-	  
+	private static final String PROPERTY_NAME_SOLR_SERVER_URL = "solr.server.url";
+
+    @Resource
+    private Environment environment;
+
+    @Bean
+    public HttpSolrServerFactoryBean solrServerFactoryBean() {
+        HttpSolrServerFactoryBean factory = new HttpSolrServerFactoryBean();
+        factory.setUrl(environment.getRequiredProperty(PROPERTY_NAME_SOLR_SERVER_URL));
+        return factory;
+    }
+
+    @Bean
+    public SolrTemplate solrTemplate() throws Exception {
+        return new SolrTemplate(solrServerFactoryBean().getObject());
+    }
+
 	public static void main(String[] args) {
 		SpringApplication.run(ShopGgApplication.class, args);
 	}

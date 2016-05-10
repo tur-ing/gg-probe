@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import de.gg.model.Customer;
 import de.gg.repository.CustomerRepository;
+import de.gg.solr.repository.CustomerDocumentRepository;
 
 @Configuration
 @RestController
@@ -18,10 +19,16 @@ public class SolrController {
 	@Autowired
 	CustomerRepository customerRepository;
 	
+	@Autowired
+	CustomerDocumentRepository customerDocumentRepository;
+	
 	@RequestMapping(value = "/initSolr", method = RequestMethod.GET)
 	public Page<Customer> initSolr() {
-		Pageable limit = new PageRequest(0,10);
+		int documents = 100;
+		Pageable limit = new PageRequest(0,documents);
 		Page<Customer> customers = customerRepository.findAll(limit);
+		//to be done
+		//customerDocumentRepository.addAllToIndex(customers);
 		return customers;
 	}
 

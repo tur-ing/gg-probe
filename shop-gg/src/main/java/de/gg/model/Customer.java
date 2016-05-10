@@ -32,6 +32,10 @@ public class Customer {
 	public Customer() {
 		
 	}
+	
+    public void update() {
+
+    }
 
 	public String getKundennummer() {
 		return kundennummer;

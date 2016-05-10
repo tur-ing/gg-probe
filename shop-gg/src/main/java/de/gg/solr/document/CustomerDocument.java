@@ -5,12 +5,11 @@ import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
-@SolrDocument(solrCoreName = "collection1")
+@SolrDocument(solrCoreName = "kunden")
 public class CustomerDocument {
 	
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "Namv";
-    public static final String FIELD_NACHNAME = "Namn";
 	
 	@Id
 	@Field("kunde")
@@ -31,6 +30,7 @@ public class CustomerDocument {
 	private String ortsteil;
 	@Field("lkz")
 	private String land;
+	private String update;
 	
 	public CustomerDocument() {
 		
@@ -65,6 +65,14 @@ public class CustomerDocument {
         return new Builder(kundennummer, name);
     }
 
+	public String getKundennummer() {
+		return kundennummer;
+	}
+
+	public void setKundennummer(String kundennummer) {
+		this.kundennummer = kundennummer;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -81,12 +89,68 @@ public class CustomerDocument {
 		this.nachname = nachname;
 	}
 
-	public String getKundennummer() {
-		return kundennummer;
+	public String getStrasse() {
+		return strasse;
 	}
 
-	public void setKundennummer(String kundennummer) {
-		this.kundennummer = kundennummer;
+	public void setStrasse(String strasse) {
+		this.strasse = strasse;
+	}
+
+	public String getHausnummer() {
+		return hausnummer;
+	}
+
+	public void setHausnummer(String hausnummer) {
+		this.hausnummer = hausnummer;
+	}
+
+	public String getPlz() {
+		return plz;
+	}
+
+	public void setPlz(String plz) {
+		this.plz = plz;
+	}
+
+	public String getOrt() {
+		return ort;
+	}
+
+	public void setOrt(String ort) {
+		this.ort = ort;
+	}
+
+	public String getOrtsteil() {
+		return ortsteil;
+	}
+
+	public void setOrtsteil(String ortsteil) {
+		this.ortsteil = ortsteil;
+	}
+
+	public String getLand() {
+		return land;
+	}
+
+	public void setLand(String land) {
+		this.land = land;
+	}
+
+	public String getUpdate() {
+		return update;
+	}
+
+	public void setUpdate(String update) {
+		this.update = update;
+	}
+
+	public static String getFieldId() {
+		return FIELD_ID;
+	}
+
+	public static String getFieldName() {
+		return FIELD_NAME;
 	}
 
 }
