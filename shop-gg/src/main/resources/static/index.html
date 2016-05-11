@@ -1,0 +1,151 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <style>
+	    @font-face {
+	      font-family:"icomoon";
+	      src:url("https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot");
+	      font-weight:normal;
+	      font-style:normal;
+	    }
+	    @font-face {
+	      font-family: 'icomoon';
+	      src:url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?-cmq1um');
+	      src:url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?#iefix-cmq1um') format('embedded-opentype'),
+	      url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.woff?-cmq1um') format('woff'),
+	      url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.ttf?-cmq1um') format('truetype'),
+	      url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.svg?-cmq1um#icomoon') format('svg');
+	      font-weight: normal;
+	      font-style: normal;
+	    }
+  	</style>
+  </head>
+  <body ng-app="GgApp" ng-cloak>
+	<div ng-controller="AppCtrl" ng-cloak>
+	  <md-content class="md-padding">
+		<md-toolbar ng-controller="ToolbarCtrl" class="md-accent">
+	      <div class="md-toolbar-tools">
+	        <md-button class="md-icon-button" aria-label="Settings">
+	          <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+	        </md-button>
+	        <h2>
+	          <span>gebr&uuml;der g&ouml;tz</span>
+	        </h2>
+	        <span flex></span>
+	        <md-button class="md-icon-button" aria-label="Favorite">
+	          <md-icon md-font-icon="icon-user-plus"
+	            ng-style="color: #fff, 'font-size': 16px, height: 20px"
+	            aria-label="Account"
+	            class="step "></md-icon>
+	        </md-button>
+	        <md-button class="md-icon-button" aria-label="More">
+	          <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+	        </md-button>
+	      </div>
+	    </md-toolbar>
+	    <div layout-xs="column" layout="row">
+	    <!-- begin search area -->
+	    <div flex-xs flex-gt-xs="30" layout="column">
+	    <md-card>
+		  <md-card-title>
+		    <md-card-title-text>
+		      <span class="md-headline">Suche</span>
+		    </md-card-title-text>
+		  </md-card-title>
+		  <md-card-content>
+	        <div>
+		      <form name="userForm">
+		        <div layout-gt-sm="row">
+		          <md-input-container class="md-block" flex-gt-sm>
+		            <label>Vorname</label>
+		            <input ng-model="user.vorname">
+		          </md-input-container>
+		          <md-input-container class="md-block" flex-gt-sm>
+		            <label>Nachname</label>
+		            <input ng-model="user.nachname">
+		          </md-input-container>
+		        </div>
+		        <md-input-container class="md-block">
+		          <label>Stra&szlig;e</label>
+		          <input ng-model="user.strasse">
+		        </md-input-container>
+		        <md-input-container md-no-float class="md-block">
+		          <input ng-model="user.hausnummer" placeholder="Hausnummer">
+		        </md-input-container>
+		        <div layout-gt-sm="row">
+		          <md-input-container class="md-block" flex-gt-sm>
+		            <label>Ort</label>
+		            <input ng-model="user.city">
+		          </md-input-container>
+		          <md-input-container class="md-block" flex-gt-sm>
+		            <label>Ortsteil</label>
+		            <md-select ng-model="user.state">
+		              <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+		                {{state.abbrev}}
+		              </md-option>
+		            </md-select>
+		          </md-input-container>
+		          <md-input-container class="md-block" flex-gt-sm>
+		            <label>PLZ</label>
+		            <input name="plz" ng-model="user.plz" placeholder="97080" ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
+		            <div ng-messages="userForm.postalCode.$error" role="alert" multiple>
+		              <div ng-message="required" class="my-message">You must supply a postal code.</div>
+		              <div ng-message="pattern" class="my-message">That doesn't look like a valid postal
+		                code.
+		              </div>
+		              <div ng-message="md-maxlength" class="my-message">
+		                Don't use the long version silly...we don't need to be that specific...
+		              </div>
+		            </div>
+		          </md-input-container>
+		        </div>
+		        <md-input-container class="md-block">
+		          <label>Kundennummer</label>
+		          <textarea ng-model="user.kundennummer" md-maxlength="7" ng-pattern="/^[0-9]{5}$/" md-select-on-focus></textarea>
+		        </md-input-container>
+		      </form>
+		    </div>
+		  <md-card-content>
+	    </md-card>
+	    </div>
+	    <!-- end search area -->
+	    <!-- begin result page -->
+	    <div flex-xs flex-gt-xs="70" layout="column">
+		    <md-card>
+		        <md-card-title>
+		          <md-card-title-text>
+		            <span class="md-headline">Ergebnisse</span>
+		          </md-card-title-text>
+		        </md-card-title>
+		        <md-card-content>
+		          <p>
+		            [Tabelle]
+		          </p>
+		        </md-card-content>
+		        <md-card-actions layout="row" layout-align="end center">
+		          <md-button class="md-icon-button" aria-label="Favorite">
+		            <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+		          </md-button>
+		          <md-button class="md-icon-button" aria-label="Settings">
+		            <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+		          </md-button>
+		          <md-button class="md-icon-button" aria-label="Share">
+		            <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
+		          </md-button>
+		        </md-card-actions>
+	      	</md-card>
+      	</div>
+	    <!-- end result page -->
+	    </div>
+	  </md-content>
+	</div>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+	<script src="js/app.js"></script>  
+  </body> 
+</html>
