@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet" href="css/md-data-table.min.css">
     <style>
 	    @font-face {
 	      font-family:"icomoon";
@@ -24,8 +25,7 @@
   </head>
   <body ng-app="GgApp" ng-cloak>
 	<div ng-controller="AppCtrl" ng-cloak>
-	  <md-content class="md-padding">
-		<md-toolbar ng-controller="ToolbarCtrl" class="md-accent">
+	  <md-toolbar ng-controller="ToolbarCtrl" class="md-accent">
 	      <div class="md-toolbar-tools">
 	        <md-button class="md-icon-button" aria-label="Settings">
 	          <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
@@ -36,7 +36,6 @@
 	        <span flex></span>
 	        <md-button class="md-icon-button" aria-label="Favorite">
 	          <md-icon md-font-icon="icon-user-plus"
-	            ng-style="color: #fff, 'font-size': 16px, height: 20px"
 	            aria-label="Account"
 	            class="step "></md-icon>
 	        </md-button>
@@ -44,8 +43,8 @@
 	          <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
 	        </md-button>
 	      </div>
-	    </md-toolbar>
-	    <div layout-xs="column" layout="row">
+	  </md-toolbar>
+	  <md-content class="md-padding" layout-xs="column" layout="row">
 	    <!-- begin search area -->
 	    <div flex-xs flex-gt-xs="30" layout="column">
 	    <md-card>
@@ -120,9 +119,72 @@
 		          </md-card-title-text>
 		        </md-card-title>
 		        <md-card-content>
-		          <p>
-		            [Tabelle]
-		          </p>
+				<!-- begin result table -->
+				<md-toolbar class="md-table-toolbar md-default" ng-show="!options.rowSelection || !selected.length">
+				  <div class="md-toolbar-tools">
+				    <span>Nutrition</span>
+				    <span flex></span>
+				    <md-button class="md-icon-button" ng-click="loadStuff()">
+				      <md-icon>refresh</md-icon>
+				    </md-button>
+				    <md-button class="md-icon-button">
+				      <md-icon>filter_list</md-icon>
+				    </md-button>
+				    <md-button class="md-icon-button">
+				      <md-icon>more_vert</md-icon>
+				    </md-button>
+				  </div>
+				</md-toolbar>
+				
+				<md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
+				  <div class="md-toolbar-tools">
+				    <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
+				    <span flex></span>
+				    <md-button class="md-icon-button">
+				      <md-icon>delete</md-icon>
+				    </md-button>
+				  </div>
+				</md-toolbar>
+				
+				<md-table-container ng-controller="nutritionController">
+				  <table data-md-table data-md-row-select="options.rowSelection" multiple="{{options.multiSelect}}" data-ng-model="selected" md-progress="promise">
+				    <!-- <thead md-head md-order="query.order">
+				      <tr md-row>
+				        <th md-column ng-repeat="column in columns" md-numeric="column.numeric" md-order-by="{{column.orderBy}}">
+				          <span>{{column.name}}</span>
+				          <span ng-if="column.unit">({{column.unit}})</span>
+				        </th>
+				      </tr>
+				    </thead> -->
+				    <thead ng-if="!options.decapitate" md-head data-md-order="query.order" md-on-reorder="onReorder">
+				      <tr md-row>
+				        <th md-column md:order:by="name"><span>Dessert (100g serving)</span></th>
+				        <th md-column md:order:by="type"><span>Type</span></th>
+				        <th md-column data-md-numeric data-md-order-by="calories.value" data-md-desc><span>Calories</span></th>
+				        <th md-column data-md-numeric data-md-order-by="fat.value"><span>Fat (g)</span></th>
+				        <!-- <th md-column data-md-numeric data-md-order-by="carbs.value"><span>Carbs (g)</span></th> -->
+				        <th md-column data-md-numeric data-md-order-by="protein.value"><span>Protein (g)</span></th>
+				        <!-- <th md-column data-md-numeric data-md-order-by="sodium.value"><span>Sodium (mg)</span></th> -->
+				        <!-- <th md-column data-md-numeric data-md-order-by="calcium.value"><span>Calcium (%)</span></th> -->
+				        <th md-column data-md-numeric data-md-order-by="iron.value" data-hide-sm><span>Iron (%)</span></th>
+				        <th md-column data-md-order-by="comment">
+				          <md-icon>comments</md-icon>
+				          <span>Comments</span>
+				        </th>
+				      </tr>
+				    </thead>
+				    <tbody md-body>
+				      <tr md-row md-select="customer" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect" ng-disabled="customer.calories.value > 400" data-ng-repeat="customer in customers | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page - 1) * query.limit">
+				        <td md-cell>{{customer.name}}</td>
+				        <td md-cell>{{customer.nachname}}</td>
+				        <td md-cell>{{customer.ort}}</td>
+				      </tr>
+				    </tbody>
+				  </table>
+				</md-table-container>
+				
+				<data-md-table-pagination md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{customers.count}}" md-on-paginate="onPaginate" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks"></data-md-table-pagination>
+				<!-- end result table -->
 		        </md-card-content>
 		        <md-card-actions layout="row" layout-align="end center">
 		          <md-button class="md-icon-button" aria-label="Favorite">
@@ -138,14 +200,16 @@
 	      	</md-card>
       	</div>
 	    <!-- end result page -->
-	    </div>
 	  </md-content>
 	</div>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+	<script src="js/angular-spring-data-rest.min.js"></script>
+	<script src="js/md-data-table.min.js"></script>
 	<script src="js/app.js"></script>  
   </body> 
 </html>
